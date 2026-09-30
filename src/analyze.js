@@ -50,6 +50,7 @@ export function clusters({ tables, refs }, ignoreRoot = 'Cliente') {
   for (const r of refs) {
     if (r.child === r.parent) continue;
     if (r.parent === ignoreRoot) continue;
+    if (!pais[r.child]) continue;       // ref a tabela inexistente: ignora
     pais[r.child].add(r.parent);
   }
   const porPai = {};

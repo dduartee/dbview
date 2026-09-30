@@ -14,7 +14,7 @@
 //   Ref "fk":"Pai"."a" <? "Filho"."b"   ->   Filho.b referencia Pai.a
 
 const RE_TABLE = /^Table\s+(?:"([^"]+)"|(\w+))\s*(?:as\s+\w+)?\s*\{/;
-const RE_REF = /^Ref\s+(?:"([^"]+)"|(\w+))\s*:\s*(.+?)\s*(?:\<?\s*)\s*$/;
+const RE_REF = /^Ref\s*(?:"([^"]+)"|(\w+))?\s*:\s*(.+?)\s*(?:\<?\s*)\s*$/;
 
 /**
  * Quebra uma linha de Ref em pai/filho.
@@ -24,16 +24,16 @@ const RE_REF = /^Ref\s+(?:"([^"]+)"|(\w+))\s*:\s*(.+?)\s*(?:\<?\s*)\s*$/;
  */
 function parseRefLine(line) {
   const arrow = line.includes('<?') ? '<' : line.includes('>') ? '>' : '-';
-  const [left, right] = line.split(/<[?>]|--|[<>]/).map(s => s.trim());
+  const [left, right] = line.split(/<[?>]|--|-|[<>]/).map(s => s.trim());
   if (!left || !right) return null;
 
   const side = (s) => {
-    const m = s.match(/^"([^"]+)"\s*\.\s*(?:\(([^)]*)\)|"([^"]+)")/);
+    const m = s.match(/^(?:"([^"]+)"|(\w[\w$]*))\s*\.\s*(?:\(([^)]*)\)|"([^"]+)"|(\w[\w$]*))/);
     if (!m) return null;
-    const cols = m[2]
-      ? m[2].split(',').map(c => c.trim().replace(/"/g, '')).filter(Boolean)
-      : [m[3]];
-    return { table: m[1], cols };
+    const cols = m[3]
+      ? m[3].split(',').map(c => c.trim().replace(/"/g, '')).filter(Boolean)
+      : [m[4] || m[5]];
+    return { table: m[1] || m[2], cols };
   };
 
   const a = side(left);
@@ -115,13 +115,13 @@ export function parseDbml(text) {
       continue;
     }
 
-    // coluna: "nome" TIPO [attrs]
-    const mc = line.match(/^"([^"]+)"\s+([^\[]*?)\s*(?:\[(.*)\])?\s*,?$/);
+    // coluna: "nome" TIPO [attrs]   |   nome TIPO [attrs]
+    const mc = line.match(/^(?:"([^"]+)"|(\w[\w$]*))\s+([^\[]*?)\s*(?:\[(.*)\])?\s*,?$/);
     if (mc) {
-      const attrs = parseColAttrs(mc[3] || '');
+      const attrs = parseColAttrs(mc[4] || '');
       const col = {
-        name: mc[1],
-        type: mc[2].trim(),
+        name: mc[1] || mc[2],
+        type: mc[3].trim(),
         pk: attrs.pk,
         unique: attrs.unique,
         notNull: attrs.notNull,
@@ -156,7 +156,12 @@ export function parseDbml(text) {
     });
   }
 
-  return { tables, refs };
+  // descarta refs cuja tabela nao existe no schema (FK orfa: DBML incompleto
+  // ou Ref apontando para fora). Sem isso, os modulos de analise recebem
+  // arestas penduradas e quebram.
+  const validas = refs.filter(r => tables[r.parent] && tables[r.child]);
+
+  return { tables, refs: validas };
 }
 
 /** Le um arquivo .dbml do disco. */

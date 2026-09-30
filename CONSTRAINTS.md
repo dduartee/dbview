@@ -11,8 +11,13 @@ Constraints:
 
 recommended_tools:                    # externos, avulsos, NUNCA dependências
   - name: "@dbml/cli"
-    reason: Parser oficial da linguagem DBML. Só na conversão SQL->DBML, se você precisar.
+    reason: Parser oficial da linguagem DBML. SQL DDL (Postgres/MySQL/MSSQL/Oracle) -> DBML.
     note: Recomendado, não exigido. Qualquer ferramenta que produza DBML válido serve.
+  - name: "prisma-dbml-generator"
+    reason: Prisma schema -> DBML. Generator oficial no ecossistema DBML (notiz-dev).
+  - name: "parse-server-SCHEMA-to-DBML"
+    reason: MongoDB (via Parse Server) -> DBML. Único caso NoSQL com ferramenta pronta.
+    note: DBML é SQL-centric; NoSQL genérico não tem conversor pronto.
   - name: "@dbml/cli via npx"
     reason: Roda sem instalar nada no projeto (npx baixa e descarta).
 

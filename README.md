@@ -50,14 +50,11 @@ node src/cli.js schema.dbml --analyze
 node src/cli.js schema.dbml --check
 ```
 
-### SQL → DBML (opcional)
+### Converter para DBML
 
-O dbview só lê DBML. Se sua fonte é SQL, converta antes — detalhes e
-alternativas na seção [Dependências](#dependências).
-
-```sh
-npx -y -p @dbml/cli sql2dbml --mysql schema.sql -o schema.dbml
-```
+O dbview só lê DBML. Se sua fonte é SQL, Prisma, Mongo ou um ORM, converta
+antes — cada caso tem sua ferramenta, detalhada na seção
+[Dependências](#dependências).
 
 ### Flags de layout
 
@@ -112,22 +109,52 @@ e os módulos internos. Importa apenas `node:fs`, `node:path`, `node:url`.
 **A entrada é DBML. Ponto.** O dbview não lê SQL, MySQL, Postgres nem nada
 além de `.dbml`. Se você já tem o `.dbml`, nenhuma ferramenta externa entra.
 
-### Converter SQL → DBML (opcional, sua escolha)
+### Converter para DBML (opcional, sua escolha)
 
-O dbview **não converte SQL**. Isso é um passo separado, que você faz **antes**
-de usar a ferramenta — com a ferramenta que quiser:
+O dbview **não converte nada**. A conversão é um passo separado, que você faz
+**antes** de usar a ferramenta — com a ferramenta que quiser. O dbview só exige
+que a entrada seja DBML válido; a origem não importa.
 
-- **recomendado:** `@dbml/cli` (parser oficial da linguagem DBML)
-- ou qualquer outra que produza DBML válido
+#### SQL DDL → DBML
+
+Qualquer dialeto suportado pelo parser oficial (PostgreSQL, MySQL, MSSQL, Oracle):
 
 ```sh
 # recomendado: parser oficial, avulso, nunca é dependência do dbview
 npx -y -p @dbml/cli sql2dbml --mysql schema.sql -o schema.dbml
 ```
 
-O `npx` baixa o pacote na hora e não instala nada no projeto. Depois disso o
-dbview roda 100% offline. Se preferir, instale o `@dbml/cli` do jeito que
-quiser — é decisão sua, não requisito nosso.
+#### Prisma → DBML
+
+[`prisma-dbml-generator`](https://github.com/notiz-dev/prisma-dbml-generator)
+(739★, listado no ecossistema oficial do DBML): vira um generator do Prisma e
+roda junto com `prisma generate`.
+
+```sh
+npm install -D prisma-dbml-generator
+# no schema.prisma:
+#   generator dbml { provider = "prisma-dbml-generator" }
+npx prisma generate   # gera prisma/dbml/schema.dbml
+```
+
+#### NoSQL → DBML
+
+Aqui a verdade é dura: **DBML é SQL-centric**. Não existe conversor universal
+de NoSQL/MongoDB para DBML.
+
+- **MongoDB via Parse Server:** [`parse-server-SCHEMA-to-DBML`](https://github.com/stepanic/parse-server-SCHEMA-to-DBML)
+  lê a coleção `_SCHEMA` e gera DBML. Serve só para esse caso.
+- **Outros NoSQL:** sem ferramenta pronta. Você escreve o DBML à mão (é só
+  texto, sem código) ou converte com um script seu.
+
+O dbview desenha o DBML resultante igual a qualquer outro: ele não sabe nem
+se importa se a origem era SQL, Prisma ou um documento Mongo.
+
+#### Outras linguagens / ORMs
+
+O ecossistema tem conversores comunitários para Rails (`schema_to_dbml`),
+Django (`DbmlForDjango`, nos dois sentidos), Elixir/Ecto, Laravel e outros.
+Lista viva em [dbml.dbdiagram.io/ecosystem](https://dbml.dbdiagram.io/ecosystem/).
 
 ### O HTML gerado
 
