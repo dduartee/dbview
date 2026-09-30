@@ -4,6 +4,25 @@ Lê um schema DBML e desenha um ERD interativo.
 
 Behavior: entrada DBML, saída SVG ou HTML. Um arquivo, sem build.
 
+## Motivação
+
+O [dbdiagram.io](https://dbdiagram.io) é prático: você cola um DBML e ele
+desenha o ERD na hora. Duas coisas incomodam:
+
+1. **Não é localhost.** Seu schema vai para o servidor deles.
+2. **Sem build próprio.** Você fica preso ao editor deles.
+
+O dbview faz o mesmo trabalho — DBML entra, ERD sai — mas roda **na sua
+máquina**, guarda o arquivo que quiser e não manda schema pra ninguém.
+
+O que o dbview **não** faz, e nem pretende:
+
+- editar DBML no navegador (o arquivo é a fonte; use seu editor)
+- colaboração em tempo real
+- conta, login, nuvem, histórico
+
+Interatividade sim (zoom, pan, arrastar, sliders); servidor não.
+
 ## Quick start
 
 ```sh
