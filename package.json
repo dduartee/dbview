@@ -1,0 +1,11 @@
+{
+  "name": "dbview",
+  "version": "0.1.0",
+  "description": "Le um schema DBML e desenha um ERD interativo.",
+  "type": "module",
+  "bin": { "dbview": "./src/cli.js" },
+  "engines": { "node": ">=20" },
+  "optionalDependencies": {},
+  "keywords": ["erd", "dbml", "diagram", "mysql", "schema"],
+  "license": "MIT"
+}

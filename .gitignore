@@ -1,0 +1,16 @@
+# Schema de exemplo: NUNCA versionar (schema real de cliente)
+sample/*.dbml
+
+# Saidas geradas pela ferramenta (regenerar com: node src/cli.js sample/x.dbml --out out.html)
+sample/*.html
+
+# Artefatos de prototipo (tela de laboratorio de layout)
+proto/*.html
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+proto/*.json
