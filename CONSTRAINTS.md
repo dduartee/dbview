@@ -4,7 +4,7 @@ Nível: 2 (pragmático)
 
 Constraints:
   max_lines_of_code: 1800
-  max_dependencies_direct: 1        # @dbml/cli, só na conversão SQL->DBML
+  max_dependencies_direct: 0        # @dbml/cli roda via npx, fora do runtime
   allowed_languages: [JavaScript]   # ESM, Node >= 20
   transpilation_allowed: false
   build_tool: none                  # roda direto com node
