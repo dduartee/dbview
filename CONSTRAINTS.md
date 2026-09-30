@@ -4,14 +4,17 @@ Nível: 2 (pragmático)
 
 Constraints:
   max_lines_of_code: 1800
-  max_dependencies_direct: 0        # @dbml/cli roda via npx, fora do runtime
+  max_dependencies_direct: 0        # núcleo: 0. Converter SQL->DBML é passo externo seu
   allowed_languages: [JavaScript]   # ESM, Node >= 20
   transpilation_allowed: false
   build_tool: none                  # roda direto com node
 
-approved_packages:
+recommended_tools:                    # externos, avulsos, NUNCA dependências
   - name: "@dbml/cli"
-    reason: Parser real, round-trip provado fiel. Só usado offline na conversão SQL->DBML.
+    reason: Parser oficial da linguagem DBML. Só na conversão SQL->DBML, se você precisar.
+    note: Recomendado, não exigido. Qualquer ferramenta que produza DBML válido serve.
+  - name: "@dbml/cli via npx"
+    reason: Roda sem instalar nada no projeto (npx baixa e descarta).
 
 rejected_packages:
   - name: electron
@@ -35,4 +38,4 @@ Rationale: 4 trabalhos num só binário (ver, entender, arrumar, exportar).
            Teto subiu de 1200 para 1800 em 2026-09-30: o motor de ranking
            (Sugiyama simplificado) e as métricas de grafo (betweenness,
            articulação) somaram ~500 LOC e são features reais, não bloat.
-           Real hoje: ~1691 LOC.
+           Real hoje: ~1705 LOC.
