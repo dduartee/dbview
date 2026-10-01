@@ -6,14 +6,20 @@ Behavior: entrada DBML, saída SVG ou HTML. Um arquivo, sem build.
 
 ## Motivação
 
-O [dbdiagram.io](https://dbdiagram.io) é prático: você cola um DBML e ele
-desenha o ERD na hora. Duas coisas incomodam:
+Feito para resolver um problema pessoal: eu precisava desenhar ERDs a partir de
+schemas de projetos próprios, e as opções prontas não serviam.
 
-1. **Não é localhost.** Seu schema vai para o servidor deles.
-2. **Sem build próprio.** Você fica preso ao editor deles.
+As ferramentas online de ERD são práticas — cola um DBML, desenha na hora — mas
+**não são locais**: o schema vai para o servidor delas. Para trabalho com dados
+de cliente, isso é um problema. Também não dá para guardar um ERD estático
+junto do projeto, nem versioná-lo.
 
-O dbview faz o mesmo trabalho — DBML entra, ERD sai — mas roda **na sua
-máquina**, guarda o arquivo que quiser e não manda schema pra ninguém.
+O dbview nasceu disso: DBML entra, ERD sai, tudo **na minha máquina**. O HTML
+gerado é um arquivo que fica no repo do projeto, abre offline e não manda
+schema pra ninguém.
+
+Não é um produto. É uma ferramenta que eu uso e que talvez sirva para outra
+pessoa com o mesmo incômodo.
 
 O que o dbview **não** faz, e nem pretende:
 
@@ -126,9 +132,8 @@ npx -y -p @dbml/cli sql2dbml --mysql schema.sql -o schema.dbml
 
 #### Prisma → DBML
 
-[`prisma-dbml-generator`](https://github.com/notiz-dev/prisma-dbml-generator)
-(739★, listado no ecossistema oficial do DBML): vira um generator do Prisma e
-roda junto com `prisma generate`.
+O `prisma-dbml-generator` vira um generator do Prisma e roda junto com
+`prisma generate`.
 
 ```sh
 npm install -D prisma-dbml-generator
@@ -142,8 +147,8 @@ npx prisma generate   # gera prisma/dbml/schema.dbml
 Aqui a verdade é dura: **DBML é SQL-centric**. Não existe conversor universal
 de NoSQL/MongoDB para DBML.
 
-- **MongoDB via Parse Server:** [`parse-server-SCHEMA-to-DBML`](https://github.com/stepanic/parse-server-SCHEMA-to-DBML)
-  lê a coleção `_SCHEMA` e gera DBML. Serve só para esse caso.
+- **MongoDB via Parse Server:** o `parse-server-SCHEMA-to-DBML` lê a coleção
+  `_SCHEMA` e gera DBML. Serve só para esse caso.
 - **Outros NoSQL:** sem ferramenta pronta. Você escreve o DBML à mão (é só
   texto, sem código) ou converte com um script seu.
 
@@ -152,9 +157,9 @@ se importa se a origem era SQL, Prisma ou um documento Mongo.
 
 #### Outras linguagens / ORMs
 
-O ecossistema tem conversores comunitários para Rails (`schema_to_dbml`),
-Django (`DbmlForDjango`, nos dois sentidos), Elixir/Ecto, Laravel e outros.
-Lista viva em [dbml.dbdiagram.io/ecosystem](https://dbml.dbdiagram.io/ecosystem/).
+Existem conversores comunitários para Rails (`schema_to_dbml`), Django
+(`DbmlForDjango`, nos dois sentidos), Elixir/Ecto e Laravel. Procure pelo
+nome no seu gerenciador de pacotes.
 
 ### O HTML gerado
 
