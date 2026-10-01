@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Le um schema DBML e desenha um ERD interativo.",
   "type": "module",
-  "bin": { "dbview": "./src/cli.js" },
+  "bin": { "dbview": "./src/cli.js", "sql-to-erd": "./scripts/sql-to-erd.sh" },
   "engines": { "node": ">=20" },
   "optionalDependencies": {},
   "keywords": ["erd", "dbml", "diagram", "mysql", "schema"],
