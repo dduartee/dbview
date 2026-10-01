@@ -40,6 +40,16 @@ Sem build, sem install, sem config. Só Node >= 20.
 
 Dá para instalar como comando (`npm link`), aí vira `dbview schema.dbml --out out.html`.
 
+### Do SQL ao ERD, guiado
+
+Tem um wizard que faz o caminho inteiro — converte SQL, gera o ERD, abre no
+navegador e confere se o schema está fora do git:
+
+```sh
+npm link          # instala os comandos globais dbview e sql-to-erd
+sql-to-erd        # 5 etapas guiadas
+```
+
 ## Uso
 
 ```sh
